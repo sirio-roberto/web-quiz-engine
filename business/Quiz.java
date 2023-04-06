@@ -12,6 +12,9 @@ public class Quiz {
 
     private static int idCounter = 0;
 
+    public Quiz() {
+    }
+
     public Quiz(String title, String text, List<String> options, Integer answer) {
         this.id = idCounter;
         this.title = title;
@@ -22,6 +25,9 @@ public class Quiz {
     }
 
     public Integer getId() {
+        if (id == null) {
+            id = idCounter++;
+        }
         return id;
     }
 

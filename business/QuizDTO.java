@@ -8,14 +8,18 @@ public class QuizDTO {
     private String text;
     private List<String> options;
 
-    private static int idCounter = 0;
-
-    public QuizDTO(String title, String text, List<String> options) {
-        this.id = idCounter;
+    public QuizDTO(Integer id, String title, String text, List<String> options) {
+        this.id = id;
         this.title = title;
         this.text = text;
         this.options = options;
-        idCounter++;
+    }
+
+    public QuizDTO(Quiz quiz) {
+        this.id = quiz.getId();
+        this.title = quiz.getTitle();
+        this.text = quiz.getText();
+        this.options = quiz.getOptions();
     }
 
     public Integer getId() {
