@@ -1,7 +1,9 @@
 package engine.business;
 
 import engine.business.Util.QuizResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +16,14 @@ public class QuizService {
 
     public QuizResponse postAnswer(int id, int answer) {
         Quiz quiz = getQuizById(id);
-        if (answer == quiz.getAnswer()) {
-            return new QuizResponse(true, "Congratulations, you're right!");
-        } else {
-            return new QuizResponse(false, "Wrong answer! Please, try again.");
+        if (quiz != null) {
+            if (answer == quiz.getAnswer()) {
+                return new QuizResponse(true, "Congratulations, you're right!");
+            } else {
+                return new QuizResponse(false, "Wrong answer! Please, try again.");
+            }
         }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     public QuizDTO getQuizDTOById(int id) {
@@ -26,9 +31,13 @@ public class QuizService {
     }
 
     public Quiz getQuizById(int id) {
-        return quizzes.stream()
+        Quiz quiz = quizzes.stream()
                 .filter(q -> q.getId() == id)
                 .findAny().orElse(null);
+        if (quiz != null) {
+            return quiz;
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     public Quiz createQuiz(Quiz quiz) {
