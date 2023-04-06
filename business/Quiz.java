@@ -8,7 +8,7 @@ public class Quiz {
     private String text;
     private List<String> options;
 
-    private Integer answer;
+    private List<Integer> answer;
 
     private static int idCounter = 0;
 
@@ -16,7 +16,7 @@ public class Quiz {
         this.id = idCounter++;
     }
 
-    public Quiz(String title, String text, List<String> options, Integer answer) {
+    public Quiz(String title, String text, List<String> options, List<Integer> answer) {
         this.id = idCounter++;
         this.title = title;
         this.text = text;
@@ -56,11 +56,11 @@ public class Quiz {
         this.options = options;
     }
 
-    public Integer getAnswer() {
+    public List<Integer> getAnswer() {
         return answer;
     }
 
-    public void setAnswer(Integer answer) {
+    public void setAnswer(List<Integer> answer) {
         this.answer = answer;
     }
 }
