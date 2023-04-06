@@ -32,7 +32,6 @@ public class QuizService {
     }
 
     public Quiz createQuiz(Quiz quiz) {
-        quiz.getId();
         quizzes.add(quiz);
         return quiz;
     }

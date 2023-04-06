@@ -13,21 +13,18 @@ public class Quiz {
     private static int idCounter = 0;
 
     public Quiz() {
+        this.id = idCounter++;
     }
 
     public Quiz(String title, String text, List<String> options, Integer answer) {
-        this.id = idCounter;
+        this.id = idCounter++;
         this.title = title;
         this.text = text;
         this.options = options;
         this.answer = answer;
-        idCounter++;
     }
 
     public Integer getId() {
-        if (id == null) {
-            id = idCounter++;
-        }
         return id;
     }
 
