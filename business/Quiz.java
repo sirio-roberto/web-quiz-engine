@@ -1,14 +1,27 @@
 package engine.business;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.List;
 
 public class Quiz {
     private Integer id;
+
+    @NotNull
+    @NotBlank
     private String title;
+
+    @NotNull
+    @NotBlank
     private String text;
+
+    @NotNull
+    @Size(min = 2)
     private List<String> options;
 
-    private List<Integer> answer;
+    private HashSet<Integer> answer = new HashSet<>();
 
     private static int idCounter = 0;
 
@@ -16,7 +29,7 @@ public class Quiz {
         this.id = idCounter++;
     }
 
-    public Quiz(String title, String text, List<String> options, List<Integer> answer) {
+    public Quiz(String title, String text, List<String> options, HashSet<Integer> answer) {
         this.id = idCounter++;
         this.title = title;
         this.text = text;
@@ -56,11 +69,11 @@ public class Quiz {
         this.options = options;
     }
 
-    public List<Integer> getAnswer() {
+    public HashSet<Integer> getAnswer() {
         return answer;
     }
 
-    public void setAnswer(List<Integer> answer) {
+    public void setAnswer(HashSet<Integer> answer) {
         this.answer = answer;
     }
 }

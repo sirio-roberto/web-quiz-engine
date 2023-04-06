@@ -5,19 +5,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class QuizService {
 
     private final List<Quiz> quizzes = new ArrayList<>();
 
-    public QuizResponse postAnswer(int id, int answer) {
+    public QuizResponse postAnswer(int id, HashMap<String, HashSet<Integer>> answer) {
         Quiz quiz = getQuizById(id);
         if (quiz != null) {
-            if (answer == quiz.getAnswer()) {
+            if (answer.get("answer").equals(quiz.getAnswer())) {
                 return new QuizResponse(true, "Congratulations, you're right!");
             } else {
                 return new QuizResponse(false, "Wrong answer! Please, try again.");
