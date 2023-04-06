@@ -2,22 +2,19 @@ package engine.business;
 
 import java.util.List;
 
-public class Quiz {
+public class QuizDTO {
     private Integer id;
     private String title;
     private String text;
     private List<String> options;
 
-    private Integer answer;
-
     private static int idCounter = 0;
 
-    public Quiz(String title, String text, List<String> options, Integer answer) {
+    public QuizDTO(String title, String text, List<String> options) {
         this.id = idCounter;
         this.title = title;
         this.text = text;
         this.options = options;
-        this.answer = answer;
         idCounter++;
     }
 
@@ -51,13 +48,5 @@ public class Quiz {
 
     public void setOptions(List<String> options) {
         this.options = options;
-    }
-
-    public Integer getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(Integer answer) {
-        this.answer = answer;
     }
 }

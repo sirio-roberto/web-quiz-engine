@@ -6,10 +6,8 @@ import engine.business.Util.QuizResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping(path = "api/quiz")
+@RequestMapping(path = "api/quizzes")
 public class QuizController {
     private final QuizService service;
 
@@ -18,9 +16,14 @@ public class QuizController {
         this.service = service;
     }
 
+    @GetMapping("/{id}")
+    public Quiz getQuiz(@PathVariable int id) {
+        return service.getQuizById(id);
+    }
+
     @GetMapping
-    public Quiz getQuiz() {
-        return service.getOneQuiz();
+    public Quiz getAllQuizzes() {
+        return service.getAllQuizzes();
     }
 
     @PostMapping

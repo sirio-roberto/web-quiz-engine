@@ -16,7 +16,7 @@ public class QuizService {
         }
     }
 
-    public Quiz getOneQuiz() {
+    public Quiz getQuizById() {
         List<String> options = List.of("Robot","Tea leaf","Cup of coffee","Bug");
         return new Quiz("The Java Logo", "What is depicted on the Java logo?", options);
     }
