@@ -21,32 +21,24 @@ public class QuizService {
     }
 
     public QuizResponse postAnswer(long id, HashMap<String, HashSet<Integer>> answer) {
-        try {
-            Quiz quiz = getQuizById(id);
-            if (answer.get("answer").equals(quiz.getAnswer())) {
-                return new QuizResponse(true, "Congratulations, you're right!");
-            } else {
-                return new QuizResponse(false, "Wrong answer! Please, try again.");
-            }
-        } catch (EntityNotFoundException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        Quiz quiz = getQuizById(id);
+        if (answer.get("answer").equals(quiz.getAnswer())) {
+            return new QuizResponse(true, "Congratulations, you're right!");
+        } else {
+            return new QuizResponse(false, "Wrong answer! Please, try again.");
         }
     }
 
     public QuizDTO getQuizDTOById(long id) {
-        try {
-            return new QuizDTO(getQuizById(id));
-        } catch (EntityNotFoundException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+        return new QuizDTO(getQuizById(id));
     }
 
     public Quiz getQuizById(long id) {
-        try {
-            return quizRepository.getById(id);
-        } catch (EntityNotFoundException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        Optional<Quiz> quiz = quizRepository.findById(id);
+        if (quiz.isPresent()) {
+            return quiz.get();
         }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     public Quiz createQuiz(Quiz quiz) {
