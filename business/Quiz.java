@@ -1,12 +1,19 @@
 package engine.business;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+@Entity
 public class Quiz {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
@@ -19,18 +26,16 @@ public class Quiz {
 
     @NotNull
     @Size(min = 2)
+    @ElementCollection
     private List<String> options;
 
-    private HashSet<Integer> answer = new HashSet<>();
-
-    private static long idCounter = 0;
+    @ElementCollection
+    private Set<Integer> answer = new HashSet<>();
 
     public Quiz() {
-        this.id = idCounter++;
     }
 
     public Quiz(String title, String text, List<String> options, HashSet<Integer> answer) {
-        this.id = idCounter++;
         this.title = title;
         this.text = text;
         this.options = options;
@@ -69,7 +74,7 @@ public class Quiz {
         this.options = options;
     }
 
-    public HashSet<Integer> getAnswer() {
+    public Set<Integer> getAnswer() {
         return answer;
     }
 

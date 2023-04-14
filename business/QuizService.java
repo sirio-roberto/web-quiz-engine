@@ -1,50 +1,60 @@
 package engine.business;
 
 import engine.business.Util.QuizResponse;
+import engine.persistence.QuizRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 @Service
 public class QuizService {
 
-    private final List<Quiz> quizzes = new ArrayList<>();
+    private final QuizRepository quizRepository;
 
-    public QuizResponse postAnswer(int id, HashMap<String, HashSet<Integer>> answer) {
-        Quiz quiz = getQuizById(id);
-        if (quiz != null) {
+    @Autowired
+    public QuizService(QuizRepository quizRepository) {
+        this.quizRepository = quizRepository;
+    }
+
+    public QuizResponse postAnswer(long id, HashMap<String, HashSet<Integer>> answer) {
+        try {
+            Quiz quiz = getQuizById(id);
             if (answer.get("answer").equals(quiz.getAnswer())) {
                 return new QuizResponse(true, "Congratulations, you're right!");
             } else {
                 return new QuizResponse(false, "Wrong answer! Please, try again.");
             }
+        } catch (EntityNotFoundException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
-    public QuizDTO getQuizDTOById(int id) {
-        return new QuizDTO(getQuizById(id));
+    public QuizDTO getQuizDTOById(long id) {
+        try {
+            return new QuizDTO(getQuizById(id));
+        } catch (EntityNotFoundException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
-    public Quiz getQuizById(int id) {
-        Quiz quiz = quizzes.stream()
-                .filter(q -> q.getId() == id)
-                .findAny().orElse(null);
-        if (quiz != null) {
-            return quiz;
+    public Quiz getQuizById(long id) {
+        try {
+            return quizRepository.getById(id);
+        } catch (EntityNotFoundException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     public Quiz createQuiz(Quiz quiz) {
-        quizzes.add(quiz);
-        return quiz;
+        return quizRepository.save(quiz);
     }
 
     public List<QuizDTO> getAllQuizzes() {
-        return quizzes.stream()
+        return quizRepository.findAll().stream()
                 .map(QuizDTO::new)
                 .toList();
     }

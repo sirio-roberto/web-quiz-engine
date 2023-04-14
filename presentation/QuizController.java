@@ -41,7 +41,7 @@ public class QuizController {
     }
 
     @PostMapping("/{id}/solve")
-    public QuizResponse postAnswer(@PathVariable int id, @RequestBody HashMap<String, HashSet<@Min(0) Integer>> answer) {
+    public QuizResponse postAnswer(@PathVariable long id, @RequestBody HashMap<String, HashSet<@Min(0) Integer>> answer) {
         return service.postAnswer(id, answer);
     }
 
