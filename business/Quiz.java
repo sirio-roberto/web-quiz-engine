@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class Quiz {
-    private Integer id;
+    private Long id;
 
     @NotNull
     @NotBlank
@@ -23,7 +23,7 @@ public class Quiz {
 
     private HashSet<Integer> answer = new HashSet<>();
 
-    private static int idCounter = 0;
+    private static long idCounter = 0;
 
     public Quiz() {
         this.id = idCounter++;
@@ -37,11 +37,11 @@ public class Quiz {
         this.answer = answer;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -3,12 +3,12 @@ package engine.business;
 import java.util.List;
 
 public class QuizDTO {
-    private Integer id;
+    private Long id;
     private String title;
     private String text;
     private List<String> options;
 
-    public QuizDTO(Integer id, String title, String text, List<String> options) {
+    public QuizDTO(Long id, String title, String text, List<String> options) {
         this.id = id;
         this.title = title;
         this.text = text;
@@ -22,11 +22,11 @@ public class QuizDTO {
         this.options = quiz.getOptions();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
