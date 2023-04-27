@@ -1,5 +1,7 @@
 package engine.business;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -32,10 +34,14 @@ public class Quiz {
     @ElementCollection
     private Set<Integer> answer = new HashSet<>();
 
+    @OneToOne
+    @JsonIgnore
+    private User user;
+
     public Quiz() {
     }
 
-    public Quiz(String title, String text, List<String> options, HashSet<Integer> answer) {
+    public Quiz(String title, String text, List<String> options, HashSet<Integer> answer, User user) {
         this.title = title;
         this.text = text;
         this.options = options;
@@ -80,5 +86,13 @@ public class Quiz {
 
     public void setAnswer(HashSet<Integer> answer) {
         this.answer = answer;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

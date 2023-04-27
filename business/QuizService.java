@@ -2,22 +2,26 @@ package engine.business;
 
 import engine.business.Util.QuizResponse;
 import engine.persistence.QuizRepository;
+import engine.persistence.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 @Service
 public class QuizService {
 
     private final QuizRepository quizRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public QuizService(QuizRepository quizRepository) {
+    public QuizService(QuizRepository quizRepository, UserRepository userRepository) {
         this.quizRepository = quizRepository;
+        this.userRepository = userRepository;
     }
 
     public QuizResponse postAnswer(long id, HashMap<String, HashSet<Integer>> answer) {
@@ -42,6 +46,9 @@ public class QuizService {
     }
 
     public Quiz createQuiz(Quiz quiz) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Optional<User> user = userRepository.findByEmail(auth.getName());
+        user.ifPresent(quiz::setUser);
         return quizRepository.save(quiz);
     }
 
@@ -49,5 +56,9 @@ public class QuizService {
         return quizRepository.findAll().stream()
                 .map(QuizDTO::new)
                 .toList();
+    }
+
+    public void deleteQuiz(long id) {
+        quizRepository.deleteById(id);
     }
 }

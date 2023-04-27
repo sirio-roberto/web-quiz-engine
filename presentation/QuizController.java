@@ -7,7 +7,9 @@ import engine.business.User;
 import engine.business.Util.QuizResponse;
 import engine.persistence.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +42,7 @@ public class QuizController {
     }
 
     @GetMapping("/quizzes/{id}")
-    public QuizDTO getQuiz(@PathVariable int id) {
+    public QuizDTO getQuiz(@PathVariable long id) {
         return quizService.getQuizDTOById(id);
     }
 
@@ -52,6 +54,16 @@ public class QuizController {
     @PostMapping("/quizzes/{id}/solve")
     public QuizResponse postAnswer(@PathVariable long id, @RequestBody HashMap<String, HashSet<@Min(0) Integer>> answer) {
         return quizService.postAnswer(id, answer);
+    }
+
+    @DeleteMapping("/quizzes/{id}")
+    public ResponseEntity<String> deleteQuiz(@PathVariable long id, Authentication auth) {
+        Quiz quiz = quizService.getQuizById(id);
+        if (quiz.getUser().getEmail().equals(auth.getName())) {
+            quizService.deleteQuiz(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @PostMapping("/register")
