@@ -57,8 +57,11 @@ public class QuizController {
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@Valid @RequestBody User user) {
         user.setPassword(encoder.encode(user.getPassword()));
-        userRepo.save(user);
-
+        try {
+            userRepo.save(user);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok().build();
     }
 
