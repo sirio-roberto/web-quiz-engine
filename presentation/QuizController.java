@@ -3,8 +3,12 @@ package engine.presentation;
 import engine.business.Quiz;
 import engine.business.QuizDTO;
 import engine.business.QuizService;
+import engine.business.User;
 import engine.business.Util.QuizResponse;
+import engine.persistence.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,34 +19,47 @@ import java.util.HashSet;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/quizzes")
+@RequestMapping("api")
 @Validated
 public class QuizController {
-    private final QuizService service;
+    private final QuizService quizService;
+    private final UserRepository userRepo;
+
+    private final PasswordEncoder encoder;
 
     @Autowired
-    public QuizController(QuizService service) {
-        this.service = service;
+    public QuizController(QuizService quizService, UserRepository userRepo, PasswordEncoder encoder) {
+        this.quizService = quizService;
+        this.userRepo = userRepo;
+        this.encoder = encoder;
     }
 
-    @PostMapping
+    @PostMapping("/quizzes")
     public Quiz createQuiz(@Valid @RequestBody Quiz quiz) {
-        return service.createQuiz(quiz);
+        return quizService.createQuiz(quiz);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/quizzes/{id}")
     public QuizDTO getQuiz(@PathVariable int id) {
-        return service.getQuizDTOById(id);
+        return quizService.getQuizDTOById(id);
     }
 
-    @GetMapping
+    @GetMapping("/quizzes")
     public List<QuizDTO> getAllQuizzes() {
-        return service.getAllQuizzes();
+        return quizService.getAllQuizzes();
     }
 
-    @PostMapping("/{id}/solve")
+    @PostMapping("/quizzes/{id}/solve")
     public QuizResponse postAnswer(@PathVariable long id, @RequestBody HashMap<String, HashSet<@Min(0) Integer>> answer) {
-        return service.postAnswer(id, answer);
+        return quizService.postAnswer(id, answer);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> registerUser(@Valid @RequestBody User user) {
+        user.setPassword(encoder.encode(user.getPassword()));
+        userRepo.save(user);
+
+        return ResponseEntity.ok().build();
     }
 
 }
